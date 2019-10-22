@@ -12,9 +12,9 @@ sqf.data <- sqf %>%
   filter(year >= 2013 & year <= 2015, suspected.crime == "cpw") %>% 
   mutate(precinct = as.factor(precinct),
          time.period = as.factor(time.period)) %>%
-  select(id,year,found.weapon,precinct,location.housing,suspected.crime,starts_with("additional."),
+  select(id,year,found.weapon,precinct,location.housing,starts_with("additional."),
          starts_with("stopped.bc"),suspect.age,suspect.build,suspect.sex,suspect.height,suspect.weight,
-         inside,radio.run,day,month,time.period,officer.uniform) %>% 
+         inside,radio.run,officer.uniform,day,month,time.period,observation.period) %>% 
   filter(complete.cases(.)) %>% sample_n(size = n())
 
 p20 <- nrow(sqf.data)/5
