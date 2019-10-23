@@ -76,8 +76,38 @@ rocr.pred <- prediction(predictions, sqf_pre_test$found.weapon)
 performance(rocr.pred, "auc")@y.values[[1]]
 # 0.8116203
 
+# B4
 
+sqf <- read_csv(file = '../data_hw4/sqf_08_16.csv')
 
+sqf.data <- sqf %>% 
+  filter(suspected.crime == "cpw") %>% 
+  mutate(precinct = as.factor(precinct),
+         time.period = as.factor(time.period)) %>%
+  select(id,year,found.weapon,precinct,location.housing,starts_with("additional."),
+         starts_with("stopped.bc"),suspect.age,suspect.build,suspect.sex,suspect.height,suspect.weight,
+         inside,radio.run,officer.uniform,day,month,time.period,observation.period) %>% 
+  filter(complete.cases(.)) %>% sample_n(size = n())
 
+sqf.data08 <- sqf.data %>% filter(year == 2008) %>% select(-id,-year)
 
+fitb41 <- glm(found.weapon ~ .,data = sqf.data08,family = binomial(link = "logit"))
+
+sqf.data09_16 <- sqf.data %>% filter(year != 2008) %>% select(-id,-year) %>% filter(precinct != 121)
+predictions <- predict(fitb41,sqf.data09_16,type = 'response')
+rocr.pred <- prediction(predictions, sqf.data09_16$found.weapon)
+performance(rocr.pred, "auc")@y.values[[1]]
+# 0.8114827
+
+years <- c(2009:2016)
+auc1 <- NA
+
+for(i in 1:length(years)){
+  sqf.data09_16 <- sqf.data %>% filter(year != years[i]) %>% select(-id,-year) %>% filter(precinct != 121)
+  predictions <- predict(fitb41,sqf.data09_16,type = 'response')
+  rocr.pred <- prediction(predictions, sqf.data09_16$found.weapon)
+  auc1[i] <- performance(rocr.pred, "auc")@y.values[[1]]
+}
+
+plot(years,auc1)
 
