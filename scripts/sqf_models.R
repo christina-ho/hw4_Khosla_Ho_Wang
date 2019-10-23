@@ -62,6 +62,19 @@ performance(rocr.pred, "auc")@y.values[[1]]
 hist(model_performance$validation_auc)
 abline(v = performance(rocr.pred, "auc")@y.values[[1]],col = 2)
 
+# B3
+
+sqf_pre_2015 <- sqf.data %>% filter(year < 2015) %>% select(-id,-year) %>% sample_n(size = n())
+sqf_2015 <- sqf.data %>% filter(year == 2015) %>% select(-id,-year) %>% sample_n(size = n())
+
+sqf_pre_train <- sqf_pre_2015[1:(nrow(sqf_pre_2015)/2),]
+sqf_pre_test <- sqf_pre_2015[((nrow(sqf_pre_2015)/2)+1):nrow(sqf_pre_2015),]
+
+fitb33 <- glm(found.weapon ~ . , data = sqf_pre_train,family = binomial(link = "logit"))
+predictions <- predict(fitb33,sqf_pre_test,type = 'response')
+rocr.pred <- prediction(predictions, sqf_pre_test$found.weapon)
+performance(rocr.pred, "auc")@y.values[[1]]
+# 0.8116203
 
 
 
