@@ -47,6 +47,21 @@ for(i in 1:nrow(model_performance)){
   print(i)
 }
 
+which.max(model_performance$validation_auc)
+# 330
+model_performance[330,]
+
+tvdata <- rbind(train_sqf,validation_sqf)
+
+fitb23 <- glm(found.weapon ~ location.housing + stopped.bc.object + precinct,data = tvdata,family = binomial(link = "logit"))
+predictions <- predict(fitb23,test_sqf,type = 'response')
+rocr.pred <- prediction(predictions, test_sqf$found.weapon)
+performance(rocr.pred, "auc")@y.values[[1]]
+# 0.7454521
+
+hist(model_performance$validation_auc)
+abline(v = performance(rocr.pred, "auc")@y.values[[1]],col = 2)
+
 
 
 
