@@ -24,15 +24,16 @@ time_extractor <- function(links){
   content <- read_html(links)
   time <- html_nodes(x=content, xpath='//td[contains(@class,"date")]')
   time <- html_text(time,trim = T)
-  time
+  time <- lubridate::parse_date_time(time, c("%m%d%y - %I:%M %p"))
+  lubridate::hour(time)
 }
 
 time_extractor(Nlinks[1])
 
-crime_data <- tibble('neighborhood' = neighbourhood)
+Ns <- tibble('neighborhood' = neighbourhood, 'link' = Nlinks)
 
-crime_data <- neighbourhood %>% rowwise()
-
+crime_data <- Ns[1,] %>% rowwise() %>% do(crime = type_extractor(.$link))
+hou
 
 
 
