@@ -36,11 +36,14 @@ points(crimes_hour$hour[crimes_hour$crime == "shooting"],crimes_hour$counts[crim
 points(crimes_hour$hour[crimes_hour$crime == "murder"],crimes_hour$counts[crimes_hour$crime == "murder"],type = "l",col = 3)
 points(crimes_hour$hour[crimes_hour$crime == "stabbing"],crimes_hour$counts[crimes_hour$crime == "stabbing"],type = "l",col = 4)
 points(crimes_hour$hour[crimes_hour$crime == "illegal gun possession"],crimes_hour$counts[crimes_hour$crime == "illegal gun possession"],type = "l",col = 5)
-legend("topleft",legend = c("shooting","murder","gunfire","illegal gun possession","stabbing"),lty = 1,col = c(1,2,3,4,5))
+legend("topleft",legend = c("gunfire","shooting","murder","stabbing","illegal gun possession"),lty = 1,col = c(1,2,3,4,5))
 
 # A3.3
 
 crimes2 <- crime_data %>% filter(neighborhood == "Dorchester" | neighborhood == "Downtown") %>% group_by(neighborhood,hour) %>% summarise(counts = n())
+
+plot(crimes2$hour[crimes2$neighborhood == "Dorchester"],crimes2$counts[crimes2$neighborhood == "Dorchester"],xlab = "hour", ylab = "crimes", main = "Crimes by Hour",type = "l")
+points(crimes2$hour[crimes2$neighborhood != "Dorchester"],crimes2$counts[crimes2$neighborhood != "Dorchester"],type = "l",col = 2)
 
 
 
