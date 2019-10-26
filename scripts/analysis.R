@@ -44,7 +44,7 @@ crimes2 <- crime_data %>% filter(neighborhood == "Dorchester" | neighborhood == 
 
 plot(crimes2$hour[crimes2$neighborhood == "Dorchester"],crimes2$counts[crimes2$neighborhood == "Dorchester"],xlab = "hour", ylab = "crimes", main = "Crimes by Hour",type = "l")
 points(crimes2$hour[crimes2$neighborhood != "Dorchester"],crimes2$counts[crimes2$neighborhood != "Dorchester"],type = "l",col = 2)
-
+legend("topleft",legend = c("Dorchester","Downtown"),lty = 1,col = c(1,2))
 
 
 
