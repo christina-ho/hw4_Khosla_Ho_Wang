@@ -23,5 +23,10 @@ write.csv(crime_count,"data/question_a2_1.csv")
 
 # A3.1
 
+crime_hour <- tibble(hour = names(table(crime_data$hour)),count = table(crime_data$hour))
+
+plot(as.numeric(crime_hour$hour),as.numeric(crime_hour$count),xlab = "hour", ylab = "crimes", main = "Crimes by Hour")
+
+# A3.2
 
 
