@@ -2,6 +2,9 @@ require(tidyverse)
 require(gtools)
 require(ROCR)
 
+# dir.create("data/")
+# dir.create("figures/")
+
 # B1
 
 set.seed(2048)
@@ -48,7 +51,7 @@ for(i in 1:nrow(model_performance)){
 }
 
 which.max(model_performance$validation_auc)
-# 330
+# 415
 model_performance[415,]
 
 tvdata <- rbind(train_sqf,validation_sqf)
@@ -59,8 +62,10 @@ rocr.pred <- prediction(predictions, test_sqf$found.weapon)
 performance(rocr.pred, "auc")@y.values[[1]]
 # 0.7454521
 
+png("figures/question_b2.png")
 hist(model_performance$validation_auc)
 abline(v = performance(rocr.pred, "auc")@y.values[[1]],col = 2)
+dev.off()
 
 # B3
 
@@ -109,5 +114,7 @@ for(i in 1:length(years)){
   auc1[i] <- performance(rocr.pred, "auc")@y.values[[1]]
 }
 
+png("figures/question_b4.png")
 plot(years,auc1)
+dev.off()
 
