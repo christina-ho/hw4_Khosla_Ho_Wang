@@ -49,7 +49,7 @@ for(i in 1:nrow(model_performance)){
 
 which.max(model_performance$validation_auc)
 # 330
-model_performance[330,]
+model_performance[415,]
 
 tvdata <- rbind(train_sqf,validation_sqf)
 

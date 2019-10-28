@@ -59,5 +59,6 @@ for(i in 1:21){
 
 crime_data <- tibble('crime' = types, 'hour' = time, 'neighborhood' = neighborhoods)
 
+dir.create("data/")
 write.csv(crime_data,"data/question_a2_1.csv")
 
