@@ -108,7 +108,7 @@ years <- c(2009:2016)
 auc1 <- NA
 
 for(i in 1:length(years)){
-  sqf.data09_16 <- sqf.data %>% filter(year != years[i]) %>% select(-id,-year) %>% filter(precinct != 121)
+  sqf.data09_16 <- sqf.data %>% filter(year == years[i]) %>% select(-id,-year) %>% filter(precinct != 121)
   predictions <- predict(fitb41,sqf.data09_16,type = 'response')
   rocr.pred <- prediction(predictions, sqf.data09_16$found.weapon)
   auc1[i] <- performance(rocr.pred, "auc")@y.values[[1]]
