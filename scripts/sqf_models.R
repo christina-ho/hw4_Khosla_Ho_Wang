@@ -7,9 +7,9 @@ require(ROCR)
 
 # B1
 
-set.seed(2048)
-
 sqf <- read_csv(file = '../data_hw4/sqf_08_16.csv')
+
+set.seed(2048)
 
 sqf.data <- sqf %>% 
   filter(year >= 2013 & year <= 2015, suspected.crime == "cpw") %>% 
@@ -18,7 +18,8 @@ sqf.data <- sqf %>%
   select(id,year,found.weapon,precinct,location.housing,starts_with("additional."),
          starts_with("stopped.bc"),suspect.age,suspect.build,suspect.sex,suspect.height,suspect.weight,
          inside,radio.run,officer.uniform,day,month,time.period,observation.period) %>% 
-  filter(complete.cases(.)) %>% sample_n(size = n())
+  na.omit() %>% 
+  sample_n(size = n())
 
 p20 <- nrow(sqf.data)/5
 
@@ -60,7 +61,7 @@ fitb23 <- glm(found.weapon ~ location.housing + stopped.bc.object + precinct,dat
 predictions <- predict(fitb23,test_sqf,type = 'response')
 rocr.pred <- prediction(predictions, test_sqf$found.weapon)
 performance(rocr.pred, "auc")@y.values[[1]]
-# 0.7454521
+# 0.7447619
 
 png("figures/question_b2.png")
 hist(model_performance$validation_auc)
@@ -79,7 +80,7 @@ fitb33 <- glm(found.weapon ~ . , data = sqf_pre_train,family = binomial(link = "
 predictions <- predict(fitb33,sqf_pre_test,type = 'response')
 rocr.pred <- prediction(predictions, sqf_pre_test$found.weapon)
 performance(rocr.pred, "auc")@y.values[[1]]
-# 0.8116203
+# 0.8229727
 
 # B4
 
