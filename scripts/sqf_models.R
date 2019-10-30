@@ -2,12 +2,12 @@ require(tidyverse)
 require(gtools)
 require(ROCR)
 
-# dir.create("data/")
-# dir.create("figures/")
+dir.create("data/")
+dir.create("figures/")
 
 # B1
 
-sqf <- read_csv(file = '../data_hw4/sqf_08_16.csv')
+sqf <- read_csv(file = 'data_hw4/sqf_08_16.csv')
 
 set.seed(2048)
 
@@ -53,7 +53,7 @@ for(i in 1:nrow(model_performance)){
 
 which.max(model_performance$validation_auc)
 # 415
-model_performance[415,]
+model_performance[415,3]
 
 tvdata <- rbind(train_sqf,validation_sqf)
 
@@ -65,7 +65,8 @@ performance(rocr.pred, "auc")@y.values[[1]]
 
 png("figures/question_b2.png")
 hist(model_performance$validation_auc)
-abline(v = performance(rocr.pred, "auc")@y.values[[1]],col = 2)
+abline(v = performance(rocr.pred, "auc")@y.values[[1]],col = 2,)
+abline(v = model_performance[415,3],col = 2,lty = 2)
 dev.off()
 
 # B3
@@ -77,14 +78,14 @@ sqf_pre_train <- sqf_pre_2015[1:(nrow(sqf_pre_2015)/2),]
 sqf_pre_test <- sqf_pre_2015[((nrow(sqf_pre_2015)/2)+1):nrow(sqf_pre_2015),]
 
 fitb33 <- glm(found.weapon ~ . , data = sqf_pre_train,family = binomial(link = "logit"))
-predictions <- predict(fitb33,sqf_pre_test,type = 'response')
-rocr.pred <- prediction(predictions, sqf_pre_test$found.weapon)
-performance(rocr.pred, "auc")@y.values[[1]]
+predictions3 <- predict(fitb33,sqf_pre_test,type = 'response')
+rocr.pred3 <- prediction(predictions3, sqf_pre_test$found.weapon)
+performance(rocr.pred3, "auc")@y.values[[1]]
 # 0.8229727
 
 # B4
 
-sqf <- read_csv(file = '../data_hw4/sqf_08_16.csv')
+sqf <- read_csv(file = 'data_hw4/sqf_08_16.csv')
 
 sqf.data <- sqf %>% 
   filter(suspected.crime == "cpw") %>% 
@@ -100,9 +101,9 @@ sqf.data08 <- sqf.data %>% filter(year == 2008) %>% select(-id,-year)
 fitb41 <- glm(found.weapon ~ .,data = sqf.data08,family = binomial(link = "logit"))
 
 sqf.data09_16 <- sqf.data %>% filter(year != 2008) %>% select(-id,-year) %>% filter(precinct != 121)
-predictions <- predict(fitb41,sqf.data09_16,type = 'response')
-rocr.pred <- prediction(predictions, sqf.data09_16$found.weapon)
-performance(rocr.pred, "auc")@y.values[[1]]
+predictions4 <- predict(fitb41,sqf.data09_16,type = 'response')
+rocr.pred4 <- prediction(predictions4, sqf.data09_16$found.weapon)
+performance(rocr.pred4, "auc")@y.values[[1]]
 # 0.8114827
 
 years <- c(2009:2016)
@@ -110,9 +111,9 @@ auc1 <- NA
 
 for(i in 1:length(years)){
   sqf.data09_16 <- sqf.data %>% filter(year == years[i]) %>% select(-id,-year) %>% filter(precinct != 121)
-  predictions <- predict(fitb41,sqf.data09_16,type = 'response')
-  rocr.pred <- prediction(predictions, sqf.data09_16$found.weapon)
-  auc1[i] <- performance(rocr.pred, "auc")@y.values[[1]]
+  predictions42 <- predict(fitb41,sqf.data09_16,type = 'response')
+  rocr.pred42 <- prediction(predictions42, sqf.data09_16$found.weapon)
+  auc1[i] <- performance(rocr.pred42, "auc")@y.values[[1]]
 }
 
 png("figures/question_b4.png")
